@@ -12,17 +12,17 @@ export function ModalContent({ children }: { children: ReactNode }) {
 export function getModalMethods(rootSelector: string) {
   let modalRoot: Root | undefined;
 
-  function showModal(children: ReactNode) {
+  function open(children: ReactNode) {
     if(!modalRoot) {
       modalRoot = createRoot(document.querySelector(rootSelector) as HTMLElement);
     }
 
-    modalRoot.render(<div className="bg-slate-600 flex justify-center items-center min-h-screen w-screen opacity-75" onClick={hideModal}>
+    modalRoot.render(<div className="bg-slate-600 flex justify-center items-center min-h-screen w-screen opacity-75" onClick={close}>
       <div role="dialog" className="w-1/2 m-auto max-h-50 rounded-md bg-white" onClick={e => e.stopPropagation()}>{children}</div>
     </div>);
   }
 
-  function hideModal() {
+  function close() {
     modalRoot?.unmount();
     modalRoot = undefined;
   }
@@ -31,15 +31,15 @@ export function getModalMethods(rootSelector: string) {
     return (
       <header className="flex justify-between p-4 border-b border-b-slate-500">
         {children}
-        <button onClick={hideModal}>&times;</button>
+        <button onClick={close}>&times;</button>
       </header>
     );
   }
 
   return {
-    isOpen: () => !!modalRoot,
-    showModal,
-    hideModal,
+    getState: () => modalRoot ? 'open' : 'closed',
+    open,
+    close,
     ModalHeader,
   };
 }
@@ -47,11 +47,11 @@ export function getModalMethods(rootSelector: string) {
 /**
  * this would happen in the consumer's app
  */
-const { showModal, hideModal, isOpen, ModalHeader } = getModalMethods('#modal-root');
+const { open, close, getState, ModalHeader } = getModalMethods('#modal-root');
 
 export {
-  showModal,
-  hideModal,
-  isOpen,
+  open,
+  close,
+  getState,
   ModalHeader,
 };

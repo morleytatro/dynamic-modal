@@ -1,8 +1,8 @@
-import { ModalContent, ModalHeader, showModal } from './components/Modal'
+import { ModalContent, ModalHeader, open } from './components/Modal'
 
 export function App() {
   function handleClick() {
-    showModal(
+    open(
       <>
         <ModalHeader>Dynamic Modal</ModalHeader>
         <ModalContent>
